@@ -1,0 +1,46 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Manual Visit Date typing and expanded Medicine input/display",
+  "requirements": [
+    {
+      "id": "REQ-6",
+      "summary": "Allow manual typing/editing of Visit Date while preserving calendar selection, validation, and saved timestamp behavior.",
+      "acceptanceCriteria": [
+        "On the New/Edit Visit Entry form, users can type a date directly into the Visit Date field using the keyboard.",
+        "If the user types a valid date, it updates the form state and passes the existing required-field validation.",
+        "If the user types an invalid or incomplete date and blurs/submits, the form shows a clear English inline error and does not submit.",
+        "Selecting a date via the calendar popover still works and updates the same field.",
+        "When editing an existing entry, the Visit Date field is prefilled and can be manually changed, and the saved entry uses the updated date."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
+          "operation": "modify",
+          "description": "Replace the current Visit Date Button-only picker with a text-editable date input that stays in sync with the existing shadcn-ui Calendar + Popover selection. Maintain formData.visitDate as the single source of truth for saving (BigInt timestamp), add a controlled string for user-typed date, and implement parse/format + inline validation on blur/submit with clear English errors for invalid/incomplete dates. Ensure editingEntry prefills both the Date value and the typed text representation. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Expand Medicine Name input to better support long/multiline text and render long/multiline medicine text cleanly in My Entries.",
+      "acceptanceCriteria": [
+        "The Medicine Name input area is visibly larger than the current single-line input (e.g., multi-line or increased height) so users can comfortably enter longer medicine details.",
+        "Existing validation for Medicine Name (required) continues to work and error messages remain in English.",
+        "When a saved entry has long and/or multi-line medicine text, the My Entries list shows it without being cut off, and preserves line breaks if present."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
+          "operation": "modify",
+          "description": "Change the Medicine Name field from a single-line shadcn-ui Input to a larger multi-line shadcn-ui Textarea (or otherwise increased height) while keeping the same required validation behavior and English error messaging. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/visit/MyEntriesList.tsx",
+          "operation": "modify",
+          "description": "Update the Medicine display block to preserve line breaks and avoid truncation/cutoff for long content (e.g., use wrapping and pre-wrapping classes so multi-line text renders cleanly). Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

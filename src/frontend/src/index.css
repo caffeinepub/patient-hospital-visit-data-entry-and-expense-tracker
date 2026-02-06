@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.5rem;
+        
+        /* Calm clinical palette - soft sage greens and warm neutrals */
+        --background: 0.98 0.005 140;
+        --foreground: 0.25 0.015 140;
+        
+        --card: 1 0 0;
+        --card-foreground: 0.25 0.015 140;
+        
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.015 140;
+        
+        /* Soft sage green primary */
+        --primary: 0.55 0.08 150;
+        --primary-foreground: 0.99 0 0;
+        
+        /* Warm neutral secondary */
+        --secondary: 0.95 0.01 80;
+        --secondary-foreground: 0.25 0.015 140;
+        
+        --muted: 0.96 0.008 140;
+        --muted-foreground: 0.50 0.012 140;
+        
+        --accent: 0.94 0.015 160;
+        --accent-foreground: 0.30 0.02 150;
+        
+        /* Soft coral for destructive */
+        --destructive: 0.60 0.18 25;
+        --destructive-foreground: 0.99 0 0;
+        
+        --border: 0.92 0.008 140;
+        --input: 0.92 0.008 140;
+        --ring: 0.55 0.08 150;
+        
+        --chart-1: 0.60 0.15 160;
+        --chart-2: 0.65 0.12 200;
+        --chart-3: 0.55 0.10 120;
+        --chart-4: 0.70 0.14 80;
+        --chart-5: 0.58 0.16 40;
+    }
+
+    .dark {
+        --background: 0.18 0.015 140;
+        --foreground: 0.95 0.008 140;
+        
+        --card: 0.22 0.018 140;
+        --card-foreground: 0.95 0.008 140;
+        
+        --popover: 0.20 0.016 140;
+        --popover-foreground: 0.95 0.008 140;
+        
+        /* Brighter sage for dark mode */
+        --primary: 0.65 0.12 150;
+        --primary-foreground: 0.18 0.015 140;
+        
+        --secondary: 0.28 0.020 140;
+        --secondary-foreground: 0.95 0.008 140;
+        
+        --muted: 0.26 0.018 140;
+        --muted-foreground: 0.65 0.010 140;
+        
+        --accent: 0.32 0.025 160;
+        --accent-foreground: 0.95 0.008 140;
+        
+        --destructive: 0.65 0.20 25;
+        --destructive-foreground: 0.18 0.015 140;
+        
+        --border: 0.30 0.020 140;
+        --input: 0.30 0.020 140;
+        --ring: 0.65 0.12 150;
+        
+        --chart-1: 0.65 0.18 160;
+        --chart-2: 0.70 0.15 200;
+        --chart-3: 0.60 0.14 120;
+        --chart-4: 0.75 0.16 80;
+        --chart-5: 0.63 0.18 40;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}

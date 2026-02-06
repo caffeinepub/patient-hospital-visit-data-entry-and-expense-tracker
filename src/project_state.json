@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Build a patient-facing data entry app to record hospital visit and expense details (hospital, date, doctor, patient, charges, medicines, address).",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-patient-facing-data-entry-form-to-record-a-hospital-visit-with-the-following-fields-hospital-name-text-visit-date-date-doctor-name-text-patient-name-text-hospital-charges-in-rs-number-medicine-charges-in-rs-number-medicine-name-text-address-multiline-text-include-basic-validation-required-fields-numeric-fields-must-be-0-and-clear-inline-error-messages-in-english",
+      "title": "Create a patient-facing data entry form to record a hospital visit with the following fields: Hospital name (text), Visit date (date), Doctor name (text), Patient name (text), Hospital charges in Rs (number), Medicine charges in Rs (number), Medicine name (text), Address (multiline text). Include basic validation (required fields, numeric fields must be >= 0) and clear inline error messages in English.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-my-entries-screen-that-lists-the-current-user-s-saved-hospital-visit-entries-showing-key-details-date-hospital-name-doctor-name-patient-name-hospital-rs-medicine-rs-medicine-name-address-provide-sorting-by-most-recent-first-by-visit-date-then-createdat",
+      "title": "Add a 'My Entries' screen that lists the current user’s saved hospital visit entries, showing key details (date, hospital name, doctor name, patient name, hospital Rs, medicine Rs, medicine name, address). Provide sorting by most recent first (by visit date, then createdAt).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-edit-and-delete-actions-for-an-existing-entry-with-a-confirmation-dialog-for-delete-editing-must-preload-the-existing-values-into-the-form-and-update-the-stored-record",
+      "title": "Provide edit and delete actions for an existing entry, with a confirmation dialog for delete. Editing must preload the existing values into the form and update the stored record.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-patient-friendly-visual-theme-across-the-app-colors-typography-spacing-and-components-that-feels-calm-and-clinical-e-g-neutral-soft-greens-or-warm-neutrals-and-use-it-consistently-for-the-form-list-buttons-and-dialogs-all-user-facing-text-must-be-in-english",
+      "title": "Apply a coherent, patient-friendly visual theme across the app (colors, typography, spacing, and components) that feels calm and clinical (e.g., neutral/soft greens or warm neutrals), and use it consistently for the form, list, buttons, and dialogs. All user-facing text must be in English.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-visit-date-field-in-the-visit-entry-form-to-support-manual-typing-editing-not-only-selection-via-the-calendar-popover-while-keeping-validation-and-saved-timestamp-behavior-correct",
+      "title": "Update the Visit Date field in the visit entry form to support manual typing/editing (not only selection via the calendar popover), while keeping validation and saved timestamp behavior correct.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-the-available-input-space-for-medicine-related-data-in-the-visit-entry-form-by-expanding-the-medicine-name-field-to-accommodate-longer-text-and-ensure-longer-multiline-medicine-text-displays-cleanly-in-the-entries-list",
+      "title": "Increase the available input space for medicine-related data in the visit entry form by expanding the Medicine Name field to accommodate longer text, and ensure longer/multiline medicine text displays cleanly in the entries list.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a data entry form for patient hospital visit details: hospital name, date, doctor name, patient name, hospital charges (Rs), medicine charges (Rs), medicine name, and address.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement backend persistence for visit entries in the single Motoko main actor, including functions to create an entry and list entries for the current user. Each entry must store: id, createdAt timestamp, hospitalName, visitDate, doctorName, patientName, hospitalRs, medicineRs, medicineName, address, and owner (caller principal).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Allow manual editing/typing of the visit date field (not only via date picker).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Increase input space for medicine-related data (e.g., larger/wider medicine name/medicine details field) to accommodate more text.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Patient hospital visit data entry and expense tracker",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

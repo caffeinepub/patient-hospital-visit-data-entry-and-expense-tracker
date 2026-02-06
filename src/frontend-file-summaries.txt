@@ -1,0 +1,7 @@
+{
+  "frontend/src/App.tsx": "Main application component with authentication flow, user profile setup, tabbed navigation between new entry form and entries list, and edit state management.",
+  "frontend/src/components/visit/VisitEntryForm.tsx": "Form component for creating and editing hospital visit entries with manual date input field (synced with calendar picker), multi-line textarea for medicine names, comprehensive validation, and success feedback.",
+  "frontend/src/components/visit/MyEntriesList.tsx": "List component displaying user's hospital visit entries sorted by date with detailed information cards, edit/delete actions, confirmation dialog for deletions, and proper multi-line text rendering for medicine names and addresses.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including user profile management and CRUD operations for visit entries with automatic cache invalidation.",
+  "frontend/src/index.css": "Global styles with calm clinical color palette using soft sage greens and warm neutrals in OKLCH format for both light and dark modes."
+}

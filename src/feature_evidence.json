@@ -1,0 +1,44 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-the-visit-date-field-in-the-visit-entry-form-to-support-manual-typing-editing-not-only-selection-via-the-calendar-popover-while-keeping-validation-and-saved-timestamp-behavior-correct",
+      "featureTitle": "Update the Visit Date field in the visit entry form to support manual typing/editing (not only selection via the calendar popover), while keeping validation and saved timestamp behavior correct.",
+      "files": [
+        "frontend/src/components/visit/VisitEntryForm.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-increase-the-available-input-space-for-medicine-related-data-in-the-visit-entry-form-by-expanding-the-medicine-name-field-to-accommodate-longer-text-and-ensure-longer-multiline-medicine-text-displays-cleanly-in-the-entries-list",
+      "featureTitle": "Increase the available input space for medicine-related data in the visit entry form by expanding the Medicine Name field to accommodate longer text, and ensure longer/multiline medicine text displays cleanly in the entries list.",
+      "files": [
+        "frontend/src/components/visit/MyEntriesList.tsx",
+        "frontend/src/components/visit/VisitEntryForm.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

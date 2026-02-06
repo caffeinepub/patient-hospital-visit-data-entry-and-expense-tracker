@@ -1,0 +1,59 @@
+{
+  "kind": "build_request",
+  "title": "Allow manual visit date entry and enlarge medicine input area",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-6",
+      "text": "Update the Visit Date field in the visit entry form to support manual typing/editing (not only selection via the calendar popover), while keeping validation and saved timestamp behavior correct.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Edit date manual"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the New/Edit Visit Entry form, users can type a date directly into the Visit Date field using the keyboard.",
+        "If the user types a valid date, it updates the form state and passes the existing required-field validation.",
+        "If the user types an invalid or incomplete date and blurs/submits, the form shows a clear English inline error and does not submit.",
+        "Selecting a date via the calendar popover still works and updates the same field.",
+        "When editing an existing entry, the Visit Date field is prefilled and can be manually changed, and the saved entry uses the updated date."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Increase the available input space for medicine-related data in the visit entry form by expanding the Medicine Name field to accommodate longer text, and ensure longer/multiline medicine text displays cleanly in the entries list.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Medicine data need more space"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Medicine Name input area is visibly larger than the current single-line input (e.g., multi-line or increased height) so users can comfortably enter longer medicine details.",
+        "Existing validation for Medicine Name (required) continues to work and error messages remain in English.",
+        "When a saved entry has long and/or multi-line medicine text, the My Entries list shows it without being cut off, and preserves line breaks if present."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit any files under frontend/src/components/ui (compose existing UI components instead).",
+    "Do not modify immutable paths listed in SYSTEM_CONTEXT.",
+    "Keep all user-facing text in English."
+  ],
+  "nonGoals": [
+    "No backend (Motoko) schema changes or migrations.",
+    "No changes to authentication or Internet Identity flow.",
+    "No new fields beyond adjusting the existing Visit Date and Medicine Name input UX."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
