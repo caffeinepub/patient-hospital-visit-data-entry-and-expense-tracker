@@ -7,9 +7,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useGetUserVisitEntries, useDeleteVisitEntry } from '../../hooks/useQueries';
-import { Calendar, Edit2, Trash2, MapPin, User, Stethoscope, Building2, Pill, DollarSign, Loader2 } from 'lucide-react';
+import { Calendar, Edit2, Trash2, MapPin, User, Stethoscope, Building2, Pill, Loader2, Download, FileSpreadsheet, Upload } from 'lucide-react';
 import { format } from 'date-fns';
 import type { VisitEntry } from '../../backend';
+import { exportToExcel } from '../../utils/visitEntryExport';
+import { exportToPDF } from '../../utils/visitEntryPdf';
+import ImportVisitEntriesDialog from './ImportVisitEntriesDialog';
 
 interface MyEntriesListProps {
   onEditEntry: (entry: VisitEntry) => void;
@@ -21,6 +24,7 @@ export default function MyEntriesList({ onEditEntry }: MyEntriesListProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [entryToDelete, setEntryToDelete] = useState<VisitEntry | null>(null);
   const [confirmHospitalName, setConfirmHospitalName] = useState('');
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
 
   const sortedEntries = entries ? [...entries].sort((a, b) => {
     const dateCompare = Number(b.visitDate) - Number(a.visitDate);
@@ -54,6 +58,18 @@ export default function MyEntriesList({ onEditEntry }: MyEntriesListProps) {
     setDeleteDialogOpen(false);
     setEntryToDelete(null);
     setConfirmHospitalName('');
+  };
+
+  const handleExportCSV = () => {
+    if (sortedEntries.length > 0) {
+      exportToExcel(sortedEntries);
+    }
+  };
+
+  const handleExportPDF = () => {
+    if (sortedEntries.length > 0) {
+      exportToPDF(sortedEntries);
+    }
   };
 
   if (isLoading) {
@@ -97,12 +113,19 @@ export default function MyEntriesList({ onEditEntry }: MyEntriesListProps) {
               <div>
                 <h3 className="font-semibold text-foreground mb-1">No entries yet</h3>
                 <p className="text-sm text-muted-foreground">
-                  Start by creating your first hospital visit entry
+                  Start by creating your first hospital visit entry or import existing data
                 </p>
+              </div>
+              <div className="pt-4">
+                <Button onClick={() => setImportDialogOpen(true)} variant="outline" className="gap-2">
+                  <Upload className="w-4 h-4" />
+                  Import from CSV
+                </Button>
               </div>
             </div>
           </CardContent>
         </Card>
+        <ImportVisitEntriesDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} />
       </div>
     );
   }
@@ -110,12 +133,26 @@ export default function MyEntriesList({ onEditEntry }: MyEntriesListProps) {
   return (
     <>
       <div className="max-w-4xl mx-auto space-y-4">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
             <h2 className="text-2xl font-semibold text-foreground">My Entries</h2>
             <p className="text-sm text-muted-foreground mt-1">
               {sortedEntries.length} {sortedEntries.length === 1 ? 'entry' : 'entries'} recorded
             </p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <Button onClick={() => setImportDialogOpen(true)} variant="outline" size="sm" className="gap-2">
+              <Upload className="w-4 h-4" />
+              Import
+            </Button>
+            <Button onClick={handleExportCSV} variant="outline" size="sm" className="gap-2">
+              <FileSpreadsheet className="w-4 h-4" />
+              Export CSV
+            </Button>
+            <Button onClick={handleExportPDF} variant="outline" size="sm" className="gap-2">
+              <Download className="w-4 h-4" />
+              Export PDF
+            </Button>
           </div>
         </div>
 
@@ -259,6 +296,8 @@ export default function MyEntriesList({ onEditEntry }: MyEntriesListProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ImportVisitEntriesDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} />
     </>
   );
 }

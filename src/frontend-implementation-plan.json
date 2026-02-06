@@ -1,44 +1,52 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Manual Visit Date typing and expanded Medicine input/display",
+  "title": "Fix New Visit Entry save errors and surface mutation failures in UI",
   "requirements": [
     {
-      "id": "REQ-6",
-      "summary": "Allow manual typing/editing of Visit Date while preserving calendar selection, validation, and saved timestamp behavior.",
+      "id": "REQ-16",
+      "summary": "Make the New Visit Entry save flow reliably succeed for valid data, prevent BigInt conversion errors from non-integer charges, and show a visible English error message on failure without clearing the form.",
       "acceptanceCriteria": [
-        "On the New/Edit Visit Entry form, users can type a date directly into the Visit Date field using the keyboard.",
-        "If the user types a valid date, it updates the form state and passes the existing required-field validation.",
-        "If the user types an invalid or incomplete date and blurs/submits, the form shows a clear English inline error and does not submit.",
-        "Selecting a date via the calendar popover still works and updates the same field.",
-        "When editing an existing entry, the Visit Date field is prefilled and can be manually changed, and the saved entry uses the updated date."
+        "From the \"New Entry\" tab, submitting the form with valid values results in the success message and the entry appears in \"My Entries\".",
+        "If saving fails for any reason (including client-side BigInt conversion errors or backend errors), the user sees a visible error message in English (e.g., \"Could not save entry. Please try again.\") and the form values are not cleared.",
+        "Hospital Charges (Rs) and Medicine Charges (Rs) inputs prevent or clearly validate non-integer values (e.g., decimals) so they cannot cause a BigInt conversion exception on submit.",
+        "The app does not rely only on console logs to communicate save failures to the user."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/visit/VisitEntryForm.tsx",
           "operation": "modify",
-          "description": "Replace the current Visit Date Button-only picker with a text-editable date input that stays in sync with the existing shadcn-ui Calendar + Popover selection. Maintain formData.visitDate as the single source of truth for saving (BigInt timestamp), add a controlled string for user-typed date, and implement parse/format + inline validation on blur/submit with clear English errors for invalid/incomplete dates. Ensure editingEntry prefills both the Date value and the typed text representation. Verify the component's usage instructions before implementing."
+          "description": "Add an in-form, visible error banner/state for save failures; ensure catch blocks set a user-friendly English message (instead of only console logging) and do not clear form fields on failure. Strengthen Hospital Charges (Rs) and Medicine Charges (Rs) validation to require non-negative integers (reject decimals) before any BigInt conversion, and prevent/sanitize non-integer input where feasible via input attributes and onChange filtering. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/utils/errorMessages.ts",
+          "operation": "create",
+          "description": "Create a small shared utility to convert unknown errors (including BigInt conversion errors and backend rejections) into sanitized, user-friendly English messages suitable for UI display (no raw stack traces). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/visit/ImportVisitEntriesDialog.tsx",
+          "operation": "modify",
+          "description": "Update bulk-create flow to display a clear English error/toast when an entry fails to import (using the shared error-to-message utility) rather than relying on console logs; align numeric/BigInt conversions defensively to avoid client-side conversion exceptions during import. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-7",
-      "summary": "Expand Medicine Name input to better support long/multiline text and render long/multiline medicine text cleanly in My Entries.",
+      "id": "REQ-17",
+      "summary": "Ensure create/edit visit entry mutations return actionable, sanitized error details so authorization/type traps can be shown as user-friendly English UI messages.",
       "acceptanceCriteria": [
-        "The Medicine Name input area is visibly larger than the current single-line input (e.g., multi-line or increased height) so users can comfortably enter longer medicine details.",
-        "Existing validation for Medicine Name (required) continues to work and error messages remain in English.",
-        "When a saved entry has long and/or multi-line medicine text, the My Entries list shows it without being cut off, and preserves line breaks if present."
+        "When the backend rejects create/edit (e.g., traps), the UI displays an English error message and does not show the success banner.",
+        "The error message shown to users is sanitized/user-friendly (no raw stack traces), but should be specific enough to guide the user when possible (e.g., \"Unauthorized. Please sign in again.\")."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Change the Medicine Name field from a single-line shadcn-ui Input to a larger multi-line shadcn-ui Textarea (or otherwise increased height) while keeping the same required validation behavior and English error messaging. Verify the component's usage instructions before implementing."
+          "description": "Wrap visit entry create/edit mutation functions to catch backend rejections and rethrow a sanitized Error (using the shared error-to-message utility) so callers (forms/dialogs) can consistently render actionable UI messages; specifically map authorization-related failures to a clear message (per the selected authorization system guidance). Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/visit/MyEntriesList.tsx",
+          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
           "operation": "modify",
-          "description": "Update the Medicine display block to preserve line breaks and avoid truncation/cutoff for long content (e.g., use wrapping and pre-wrapping classes so multi-line text renders cleanly). Verify the component's usage instructions before implementing."
+          "description": "Consume the sanitized mutation errors from the visit entry create/edit hooks and present them to the user in a visible English message area; ensure no success banner is shown when a mutation fails. Verify the component's usage instructions before implementing."
         }
       ]
     }

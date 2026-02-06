@@ -1,56 +1,53 @@
 {
   "kind": "build_request",
-  "title": "Allow manual visit date entry and enlarge medicine input area",
-  "priority": "normal",
+  "title": "Fix error when saving a new visit entry",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-6",
-      "text": "Update the Visit Date field in the visit entry form to support manual typing/editing (not only selection via the calendar popover), while keeping validation and saved timestamp behavior correct.",
+      "id": "REQ-16",
+      "text": "Fix the New Visit Entry save flow so that valid entries can always be saved successfully, and show a clear English error message in the UI when saving fails (instead of failing silently in the console).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "recent-messages"
         ],
         "quotes": [
-          "Edit date manual"
+          "User message: \"Error to save new entry\""
         ]
       },
       "acceptanceCriteria": [
-        "On the New/Edit Visit Entry form, users can type a date directly into the Visit Date field using the keyboard.",
-        "If the user types a valid date, it updates the form state and passes the existing required-field validation.",
-        "If the user types an invalid or incomplete date and blurs/submits, the form shows a clear English inline error and does not submit.",
-        "Selecting a date via the calendar popover still works and updates the same field.",
-        "When editing an existing entry, the Visit Date field is prefilled and can be manually changed, and the saved entry uses the updated date."
+        "From the \"New Entry\" tab, submitting the form with valid values results in the success message and the entry appears in \"My Entries\".",
+        "If saving fails for any reason (including client-side BigInt conversion errors or backend errors), the user sees a visible error message in English (e.g., \"Could not save entry. Please try again.\") and the form values are not cleared.",
+        "Hospital Charges (Rs) and Medicine Charges (Rs) inputs prevent or clearly validate non-integer values (e.g., decimals) so they cannot cause a BigInt conversion exception on submit.",
+        "The app does not rely only on console logs to communicate save failures to the user."
       ]
     },
     {
-      "id": "REQ-7",
-      "text": "Increase the available input space for medicine-related data in the visit entry form by expanding the Medicine Name field to accommodate longer text, and ensure longer/multiline medicine text displays cleanly in the entries list.",
+      "id": "REQ-17",
+      "text": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "recent-messages"
         ],
         "quotes": [
-          "Medicine data need more space"
+          "User message: \"Error to save new entry\""
         ]
       },
       "acceptanceCriteria": [
-        "The Medicine Name input area is visibly larger than the current single-line input (e.g., multi-line or increased height) so users can comfortably enter longer medicine details.",
-        "Existing validation for Medicine Name (required) continues to work and error messages remain in English.",
-        "When a saved entry has long and/or multi-line medicine text, the My Entries list shows it without being cut off, and preserves line breaks if present."
+        "When the backend rejects create/edit (e.g., traps), the UI displays an English error message and does not show the success banner.",
+        "The error message shown to users is sanitized/user-friendly (no raw stack traces), but should be specific enough to guide the user when possible (e.g., \"Unauthorized. Please sign in again.\")."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (compose existing UI components instead).",
-    "Do not modify immutable paths listed in SYSTEM_CONTEXT.",
-    "Keep all user-facing text in English."
+    "Do not edit files under frontend/immutablePaths (including frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/main.tsx, and frontend/src/components/ui).",
+    "Keep all user-facing text in English.",
+    "Backend must remain a single Motoko actor in backend/main.mo; only introduce migration.mo if a state upgrade is required (not expected for this fix)."
   ],
   "nonGoals": [
-    "No backend (Motoko) schema changes or migrations.",
-    "No changes to authentication or Internet Identity flow.",
-    "No new fields beyond adjusting the existing Visit Date and Medicine Name input UX."
+    "Do not redesign the overall UI theme or navigation for this fix.",
+    "Do not add new data fields to visit entries or change the stored schema unless strictly required to fix saving."
   ],
   "imageRequirements": {
     "required": [],

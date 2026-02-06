@@ -6,8 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useCreateVisitEntry, useEditVisitEntry } from '../../hooks/useQueries';
-import { CalendarIcon, CheckCircle2, X } from 'lucide-react';
+import { CalendarIcon, CheckCircle2, X, AlertCircle } from 'lucide-react';
 import { format, parse, isValid } from 'date-fns';
 import type { VisitEntry } from '../../backend';
 
@@ -43,6 +44,7 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
   const createMutation = useCreateVisitEntry();
   const editMutation = useEditVisitEntry();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [dateInputValue, setDateInputValue] = useState('');
 
@@ -75,6 +77,7 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
       });
       setDateInputValue(format(visitDate, 'MM/dd/yyyy'));
       setShowSuccess(false);
+      setSaveError(null);
     }
   }, [editingEntry]);
 
@@ -90,11 +93,15 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
         return !value?.trim() ? 'Patient name is required' : undefined;
       case 'hospitalRs':
         if (!value?.trim()) return 'Hospital charges are required';
-        if (isNaN(Number(value)) || Number(value) < 0) return 'Must be a valid number (0 or greater)';
+        const hospitalNum = Number(value);
+        if (isNaN(hospitalNum) || hospitalNum < 0) return 'Must be a valid number (0 or greater)';
+        if (!Number.isInteger(hospitalNum)) return 'Must be a whole number (no decimals)';
         return undefined;
       case 'medicineRs':
         if (!value?.trim()) return 'Medicine charges are required';
-        if (isNaN(Number(value)) || Number(value) < 0) return 'Must be a valid number (0 or greater)';
+        const medicineNum = Number(value);
+        if (isNaN(medicineNum) || medicineNum < 0) return 'Must be a valid number (0 or greater)';
+        if (!Number.isInteger(medicineNum)) return 'Must be a whole number (no decimals)';
         return undefined;
       case 'medicineName':
         return !value?.trim() ? 'Medicine name is required' : undefined;
@@ -133,6 +140,12 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
       const error = validateField(field, value);
       setErrors({ ...errors, [field]: error });
     }
+  };
+
+  const handleNumericInput = (field: 'hospitalRs' | 'medicineRs', value: string) => {
+    // Remove any non-digit characters except leading minus (though we don't allow negative)
+    const sanitized = value.replace(/[^\d]/g, '');
+    handleChange(field, sanitized);
   };
 
   const handleDateInputChange = (value: string) => {
@@ -182,6 +195,7 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaveError(null);
     setTouched({
       hospitalName: true,
       visitDate: true,
@@ -198,9 +212,20 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
     }
 
     try {
+      // Validate and convert to integers before BigInt conversion
+      const hospitalRsNum = Math.floor(Number(formData.hospitalRs));
+      const medicineRsNum = Math.floor(Number(formData.medicineRs));
+
+      if (!Number.isInteger(hospitalRsNum) || hospitalRsNum < 0) {
+        throw new Error('Hospital charges must be a valid whole number');
+      }
+      if (!Number.isInteger(medicineRsNum) || medicineRsNum < 0) {
+        throw new Error('Medicine charges must be a valid whole number');
+      }
+
       const visitDateTimestamp = BigInt(formData.visitDate!.getTime());
-      const hospitalRs = BigInt(formData.hospitalRs);
-      const medicineRs = BigInt(formData.medicineRs);
+      const hospitalRs = BigInt(hospitalRsNum);
+      const medicineRs = BigInt(medicineRsNum);
 
       if (editingEntry) {
         await editMutation.mutateAsync({
@@ -227,6 +252,7 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
         });
       }
 
+      // Only clear form and show success if mutation succeeded
       setFormData({
         hospitalName: '',
         visitDate: undefined,
@@ -248,6 +274,9 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
         }
       }, 2000);
     } catch (error) {
+      // Display error to user instead of just logging
+      const errorMessage = error instanceof Error ? error.message : 'Could not save entry. Please try again.';
+      setSaveError(errorMessage);
       console.error('Failed to save entry:', error);
     }
   };
@@ -267,6 +296,7 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
     setTouched({});
     setErrors({});
     setShowSuccess(false);
+    setSaveError(null);
     if (onCancelEdit) {
       onCancelEdit();
     }
@@ -283,6 +313,13 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
             {editingEntry ? 'Entry updated successfully!' : 'Entry saved successfully!'}
           </p>
         </div>
+      )}
+
+      {saveError && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{saveError}</AlertDescription>
+        </Alert>
       )}
 
       <Card>
@@ -394,12 +431,11 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
                 </Label>
                 <Input
                   id="hospitalRs"
-                  type="number"
-                  min="0"
-                  step="1"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="0"
                   value={formData.hospitalRs}
-                  onChange={(e) => handleChange('hospitalRs', e.target.value)}
+                  onChange={(e) => handleNumericInput('hospitalRs', e.target.value)}
                   onBlur={() => handleBlur('hospitalRs')}
                   className={errors.hospitalRs && touched.hospitalRs ? 'border-destructive' : ''}
                 />
@@ -414,12 +450,11 @@ export default function VisitEntryForm({ editingEntry, onCancelEdit, onSaveCompl
                 </Label>
                 <Input
                   id="medicineRs"
-                  type="number"
-                  min="0"
-                  step="1"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="0"
                   value={formData.medicineRs}
-                  onChange={(e) => handleChange('medicineRs', e.target.value)}
+                  onChange={(e) => handleNumericInput('medicineRs', e.target.value)}
                   onBlur={() => handleBlur('medicineRs')}
                   className={errors.medicineRs && touched.medicineRs ? 'border-destructive' : ''}
                 />

@@ -1,10 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
-  "summary": "Build a patient-facing data entry app to record hospital visit and expense details (hospital, date, doctor, patient, charges, medicines, address).",
+  "projectStateVersion": 15,
+  "summary": "Build a patient-facing data entry app to record hospital visit and expense details, plus an analytics page showing monthly/yearly totals and graphs for hospital and medicine spending.",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Import/Export button not visible to user on the deployed app (user reports: \"Did not see button\").",
+    "User reports an error when saving a new entry (possible regression; saving previously worked)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-patient-facing-data-entry-form-to-record-a-hospital-visit-with-the-following-fields-hospital-name-text-visit-date-date-doctor-name-text-patient-name-text-hospital-charges-in-rs-number-medicine-charges-in-rs-number-medicine-name-text-address-multiline-text-include-basic-validation-required-fields-numeric-fields-must-be-0-and-clear-inline-error-messages-in-english",
@@ -53,6 +56,86 @@
         "REQ-7"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-an-export-to-xlsx-action-that-lets-an-authenticated-user-download-all-of-their-hospital-visit-entries-as-a-single-xlsx-file-from-the-my-entries-screen",
+      "title": "Add an export-to-XLSX action that lets an authenticated user download all of their hospital visit entries as a single .xlsx file from the \"My Entries\" screen.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-export-to-pdf-action-that-lets-an-authenticated-user-download-a-pdf-report-of-all-of-their-hospital-visit-entries-from-the-my-entries-screen",
+      "title": "Add an export-to-PDF action that lets an authenticated user download a PDF report of all of their hospital visit entries from the \"My Entries\" screen.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-import-from-xlsx-action-that-allows-an-authenticated-user-to-upload-an-xlsx-file-and-import-hospital-visit-entries-into-their-account",
+      "title": "Add an import-from-XLSX action that allows an authenticated user to upload an .xlsx file and import hospital visit entries into their account.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-authenticated-analytics-page-that-shows-monthly-and-yearly-totals-of-spending-for-both-hospital-charges-rs-and-medicine-charges-rs-based-on-the-current-user-s-saved-visit-entries",
+      "title": "Add a new authenticated Analytics page that shows monthly and yearly totals of spending for both Hospital Charges (Rs) and Medicine Charges (Rs), based on the current user’s saved visit entries.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-analytics-page-generate-and-display-spending-graphs-charts-for-hospital-charges-rs-and-medicine-charges-rs-over-time-using-the-existing-entries-visitdate-values-for-grouping",
+      "title": "On the Analytics page, generate and display spending graphs/charts for Hospital Charges (Rs) and Medicine Charges (Rs) over time using the existing entries’ visitDate values for grouping.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-main-tab-navigation-to-include-the-new-analytics-tab-without-breaking-the-existing-new-entry-and-my-entries-flows-including-edit-entry-behavior-that-returns-to-new-entry",
+      "title": "Update the main tab navigation to include the new Analytics tab without breaking the existing New Entry and My Entries flows (including edit-entry behavior that returns to New Entry).",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-analytics-page-spending-bar-charts-to-use-more-clearly-differentiated-colors-for-hospital-charges-and-medicine-charges-in-both-light-and-dark-themes",
+      "title": "Update the Analytics page spending bar charts to use more clearly differentiated colors for Hospital Charges and Medicine Charges (in both light and dark themes).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-rupee-amount-directly-on-the-spending-bar-charts-as-data-labels-value-annotations-for-both-hospital-charges-and-medicine-charges",
+      "title": "Display the rupee amount directly on the spending bar charts as data labels (value annotations) for both Hospital Charges and Medicine Charges.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-new-visit-entry-save-flow-so-that-valid-entries-can-always-be-saved-successfully-and-show-a-clear-english-error-message-in-the-ui-when-saving-fails-instead-of-failing-silently-in-the-console",
+      "title": "Fix the New Visit Entry save flow so that valid entries can always be saved successfully, and show a clear English error message in the UI when saving fails (instead of failing silently in the console).",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-visit-entry-create-edit-mutations-propagate-actionable-error-details-to-the-ui-so-that-backend-traps-for-example-authorization-or-type-errors-can-be-surfaced-as-a-user-friendly-english-message",
+      "title": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -79,6 +162,24 @@
     {
       "id": "AR-5",
       "summary": "Increase input space for medicine-related data (e.g., larger/wider medicine name/medicine details field) to accommodate more text.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add Import/Export buttons to allow users to export (and/or import) visit/expense entries in XLSX and PDF formats.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add an analytics page that shows monthly and yearly totals for Hospital Rs and Medicine Rs, and generates graphs/charts of these totals over time.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Update analytics graphs to use different colors and display the amounts on the graph (e.g., data labels/value annotations).",
       "reqIds": [],
       "status": "pending"
     }

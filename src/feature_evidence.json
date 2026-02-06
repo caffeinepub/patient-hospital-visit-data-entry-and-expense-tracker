@@ -2,10 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-visit-date-field-in-the-visit-entry-form-to-support-manual-typing-editing-not-only-selection-via-the-calendar-popover-while-keeping-validation-and-saved-timestamp-behavior-correct",
-      "featureTitle": "Update the Visit Date field in the visit entry form to support manual typing/editing (not only selection via the calendar popover), while keeping validation and saved timestamp behavior correct.",
+      "featureId": "feature-fix-the-new-visit-entry-save-flow-so-that-valid-entries-can-always-be-saved-successfully-and-show-a-clear-english-error-message-in-the-ui-when-saving-fails-instead-of-failing-silently-in-the-console",
+      "featureTitle": "Fix the New Visit Entry save flow so that valid entries can always be saved successfully, and show a clear English error message in the UI when saving fails (instead of failing silently in the console).",
       "files": [
-        "frontend/src/components/visit/VisitEntryForm.tsx"
+        "frontend/src/components/visit/ImportVisitEntriesDialog.tsx",
+        "frontend/src/components/visit/VisitEntryForm.tsx",
+        "frontend/src/utils/errorMessages.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,16 +18,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-6"
+        "REQ-16"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-increase-the-available-input-space-for-medicine-related-data-in-the-visit-entry-form-by-expanding-the-medicine-name-field-to-accommodate-longer-text-and-ensure-longer-multiline-medicine-text-displays-cleanly-in-the-entries-list",
-      "featureTitle": "Increase the available input space for medicine-related data in the visit entry form by expanding the Medicine Name field to accommodate longer text, and ensure longer/multiline medicine text displays cleanly in the entries list.",
+      "featureId": "feature-ensure-the-visit-entry-create-edit-mutations-propagate-actionable-error-details-to-the-ui-so-that-backend-traps-for-example-authorization-or-type-errors-can-be-surfaced-as-a-user-friendly-english-message",
+      "featureTitle": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
       "files": [
-        "frontend/src/components/visit/MyEntriesList.tsx",
-        "frontend/src/components/visit/VisitEntryForm.tsx"
+        "frontend/src/components/visit/VisitEntryForm.tsx",
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -36,7 +38,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-7"
+        "REQ-17"
       ],
       "confidence": "high"
     }

@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import type { UserProfile, VisitEntry } from '../backend';
+import { formatErrorMessage } from '../utils/errorMessages';
 
-// User Profile Queries
 export function useGetCallerUserProfile() {
   const { actor, isFetching: actorFetching } = useActor();
 
@@ -38,20 +38,6 @@ export function useSaveCallerUserProfile() {
   });
 }
 
-// Visit Entry Queries
-export function useGetUserVisitEntries() {
-  const { actor, isFetching: actorFetching } = useActor();
-
-  return useQuery<VisitEntry[]>({
-    queryKey: ['visitEntries'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getUserVisitEntries();
-    },
-    enabled: !!actor && !actorFetching,
-  });
-}
-
 export function useCreateVisitEntry() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -68,20 +54,37 @@ export function useCreateVisitEntry() {
       address: string;
     }) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.createVisitEntry(
-        params.hospitalName,
-        params.visitDate,
-        params.doctorName,
-        params.patientName,
-        params.hospitalRs,
-        params.medicineRs,
-        params.medicineName,
-        params.address
-      );
+      try {
+        return await actor.createVisitEntry(
+          params.hospitalName,
+          params.visitDate,
+          params.doctorName,
+          params.patientName,
+          params.hospitalRs,
+          params.medicineRs,
+          params.medicineName,
+          params.address
+        );
+      } catch (error) {
+        throw new Error(formatErrorMessage(error));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['visitEntries'] });
     },
+  });
+}
+
+export function useGetUserVisitEntries() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<VisitEntry[]>({
+    queryKey: ['visitEntries'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getUserVisitEntries();
+    },
+    enabled: !!actor && !isFetching,
   });
 }
 
@@ -102,17 +105,21 @@ export function useEditVisitEntry() {
       address: string;
     }) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.editVisitEntry(
-        params.id,
-        params.hospitalName,
-        params.visitDate,
-        params.doctorName,
-        params.patientName,
-        params.hospitalRs,
-        params.medicineRs,
-        params.medicineName,
-        params.address
-      );
+      try {
+        return await actor.editVisitEntry(
+          params.id,
+          params.hospitalName,
+          params.visitDate,
+          params.doctorName,
+          params.patientName,
+          params.hospitalRs,
+          params.medicineRs,
+          params.medicineName,
+          params.address
+        );
+      } catch (error) {
+        throw new Error(formatErrorMessage(error));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['visitEntries'] });

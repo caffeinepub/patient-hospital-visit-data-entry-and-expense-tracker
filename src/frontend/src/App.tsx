@@ -8,8 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FileText, LogOut, User } from 'lucide-react';
+import { Toaster } from '@/components/ui/sonner';
 import VisitEntryForm from './components/visit/VisitEntryForm';
 import MyEntriesList from './components/visit/MyEntriesList';
+import AnalyticsPage from './components/analytics/AnalyticsPage';
 import type { VisitEntry } from './backend';
 
 export default function App() {
@@ -151,11 +153,12 @@ export default function App() {
 
         <main className="flex-1 container mx-auto px-4 py-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 mb-8">
               <TabsTrigger value="new-entry">
                 {editingEntry ? 'Edit Entry' : 'New Entry'}
               </TabsTrigger>
               <TabsTrigger value="my-entries">My Entries</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
 
             <TabsContent value="new-entry" className="mt-0">
@@ -168,6 +171,10 @@ export default function App() {
 
             <TabsContent value="my-entries" className="mt-0">
               <MyEntriesList onEditEntry={handleEditEntry} />
+            </TabsContent>
+
+            <TabsContent value="analytics" className="mt-0">
+              <AnalyticsPage />
             </TabsContent>
           </Tabs>
         </main>
@@ -222,6 +229,8 @@ export default function App() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Toaster />
     </>
   );
 }
