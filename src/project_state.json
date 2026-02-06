@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 15,
+  "projectStateVersion": 17,
   "summary": "Build a patient-facing data entry app to record hospital visit and expense details, plus an analytics page showing monthly/yearly totals and graphs for hospital and medicine spending.",
   "architectural_notes": [],
   "known_issues": [
     "Import/Export button not visible to user on the deployed app (user reports: \"Did not see button\").",
     "User reports an error when saving a new entry (possible regression; saving previously worked)."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-create-a-patient-facing-data-entry-form-to-record-a-hospital-visit-with-the-following-fields-hospital-name-text-visit-date-date-doctor-name-text-patient-name-text-hospital-charges-in-rs-number-medicine-charges-in-rs-number-medicine-name-text-address-multiline-text-include-basic-validation-required-fields-numeric-fields-must-be-0-and-clear-inline-error-messages-in-english",
@@ -134,6 +134,14 @@
       "title": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
       "reqIds": [
         "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-analytics-spending-graphs-so-they-visibly-use-distinct-clearly-colored-series-for-hospital-charges-and-medicine-charges-not-monochrome-in-both-light-and-dark-themes-and-ensure-the-legend-and-tooltips-match-the-same-series-colors",
+      "title": "Update the Analytics spending graphs so they visibly use distinct, clearly colored series for Hospital Charges and Medicine Charges (not monochrome), in both light and dark themes, and ensure the legend and tooltips match the same series colors.",
+      "reqIds": [
+        "REQ-18"
       ],
       "version": 1
     }

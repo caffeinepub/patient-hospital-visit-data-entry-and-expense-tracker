@@ -1,52 +1,27 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix New Visit Entry save errors and surface mutation failures in UI",
+  "title": "Distinct colored series for Analytics spending charts",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Make the New Visit Entry save flow reliably succeed for valid data, prevent BigInt conversion errors from non-integer charges, and show a visible English error message on failure without clearing the form.",
+      "id": "REQ-18",
+      "summary": "Ensure Analytics spending graphs use two clearly distinct series colors (Hospital vs Medicine) in light/dark themes, with legend and tooltips matching the series colors.",
       "acceptanceCriteria": [
-        "From the \"New Entry\" tab, submitting the form with valid values results in the success message and the entry appears in \"My Entries\".",
-        "If saving fails for any reason (including client-side BigInt conversion errors or backend errors), the user sees a visible error message in English (e.g., \"Could not save entry. Please try again.\") and the form values are not cleared.",
-        "Hospital Charges (Rs) and Medicine Charges (Rs) inputs prevent or clearly validate non-integer values (e.g., decimals) so they cannot cause a BigInt conversion exception on submit.",
-        "The app does not rely only on console logs to communicate save failures to the user."
+        "On the Analytics page, the Hospital Charges series and Medicine Charges series render in two clearly different colors.",
+        "The chart colors remain readable and distinct in both light mode and dark mode.",
+        "The legend markers and tooltip indicators match the actual series colors used in the chart.",
+        "No user-facing text is added or changed to non-English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
+          "path": "frontend/src/components/analytics/SpendingChart.tsx",
           "operation": "modify",
-          "description": "Add an in-form, visible error banner/state for save failures; ensure catch blocks set a user-friendly English message (instead of only console logging) and do not clear form fields on failure. Strengthen Hospital Charges (Rs) and Medicine Charges (Rs) validation to require non-negative integers (reject decimals) before any BigInt conversion, and prevent/sanitize non-integer input where feasible via input attributes and onChange filtering. Verify the component's usage instructions before implementing."
+          "description": "Update the chart series color configuration so the Hospital and Medicine series bind to distinct theme-aware CSS variables (avoid invalid color functions that cause monochrome rendering). Ensure Bars, legend markers, and tooltip indicators all derive from the same configured series colors via the existing shadcn/ui ChartContainer/ChartLegend/ChartTooltip components. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/utils/errorMessages.ts",
-          "operation": "create",
-          "description": "Create a small shared utility to convert unknown errors (including BigInt conversion errors and backend rejections) into sanitized, user-friendly English messages suitable for UI display (no raw stack traces). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/visit/ImportVisitEntriesDialog.tsx",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Update bulk-create flow to display a clear English error/toast when an entry fails to import (using the shared error-to-message utility) rather than relying on console logs; align numeric/BigInt conversions defensively to avoid client-side conversion exceptions during import. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "summary": "Ensure create/edit visit entry mutations return actionable, sanitized error details so authorization/type traps can be shown as user-friendly English UI messages.",
-      "acceptanceCriteria": [
-        "When the backend rejects create/edit (e.g., traps), the UI displays an English error message and does not show the success banner.",
-        "The error message shown to users is sanitized/user-friendly (no raw stack traces), but should be specific enough to guide the user when possible (e.g., \"Unauthorized. Please sign in again.\")."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Wrap visit entry create/edit mutation functions to catch backend rejections and rethrow a sanitized Error (using the shared error-to-message utility) so callers (forms/dialogs) can consistently render actionable UI messages; specifically map authorization-related failures to a clear message (per the selected authorization system guidance). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/visit/VisitEntryForm.tsx",
-          "operation": "modify",
-          "description": "Consume the sanitized mutation errors from the visit entry create/edit hooks and present them to the user in a visible English message area; ensure no success banner is shown when a mutation fails. Verify the component's usage instructions before implementing."
+          "description": "Review and, if needed, adjust the existing --chart-* theme tokens to maximize contrast and readability between Hospital vs Medicine series in both light and dark mode, while keeping the palette consistent with the current design system."
         }
       ]
     }

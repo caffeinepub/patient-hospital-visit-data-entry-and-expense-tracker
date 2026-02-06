@@ -27,9 +27,9 @@
     --radius: 0.5rem;
     
     /* Chart colors - distinct Hospital (teal-green) vs Medicine (warm amber) */
-    --chart-1: oklch(52% 0.14 170);
+    --chart-1: oklch(50% 0.16 180);
     --chart-2: oklch(65% 0.15 200);
-    --chart-3: oklch(62% 0.16 50);
+    --chart-3: oklch(65% 0.18 45);
     --chart-4: oklch(70% 0.12 60);
     --chart-5: oklch(50% 0.16 340);
   }
@@ -56,9 +56,9 @@
     --ring: oklch(65% 0.12 145);
     
     /* Chart colors for dark mode - distinct Hospital (teal) vs Medicine (amber) */
-    --chart-1: oklch(60% 0.14 170);
+    --chart-1: oklch(58% 0.16 180);
     --chart-2: oklch(70% 0.15 200);
-    --chart-3: oklch(68% 0.16 50);
+    --chart-3: oklch(70% 0.18 45);
     --chart-4: oklch(75% 0.12 60);
     --chart-5: oklch(60% 0.16 340);
   }

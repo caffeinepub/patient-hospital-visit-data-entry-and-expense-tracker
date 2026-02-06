@@ -1,41 +1,26 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T11:04:07.980Z",
+  "generatedAt": "2026-02-06T11:14:21.664Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Fix the New Visit Entry save flow so that valid entries can always be saved successfully, and show a clear English error message in the UI when saving fails (instead of failing silently in the console).",
+        "id": "REQ-18",
+        "summary": "Update the Analytics spending graphs so they visibly use distinct, clearly colored series for Hospital Charges and Medicine Charges (not monochrome), in both light and dark themes, and ensure the legend and tooltips match the same series colors.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/visit/VisitEntryForm.tsx",
-          "frontend/src/utils/errorMessages.ts",
-          "frontend/src/components/visit/ImportVisitEntriesDialog.tsx"
+          "frontend/src/components/analytics/SpendingChart.tsx",
+          "frontend/src/index.css"
         ],
         "matchedFiles": [
-          "frontend/src/components/visit/VisitEntryForm.tsx",
-          "frontend/src/utils/errorMessages.ts",
-          "frontend/src/components/visit/ImportVisitEntriesDialog.tsx"
-        ]
-      },
-      {
-        "id": "REQ-17",
-        "summary": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/visit/VisitEntryForm.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/visit/VisitEntryForm.tsx"
+          "frontend/src/components/analytics/SpendingChart.tsx",
+          "frontend/src/index.css"
         ]
       }
     ]
@@ -45,10 +30,8 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/visit/ImportVisitEntriesDialog.tsx",
-    "frontend/src/components/visit/VisitEntryForm.tsx",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/errorMessages.ts",
+    "frontend/src/components/analytics/SpendingChart.tsx",
+    "frontend/src/index.css",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

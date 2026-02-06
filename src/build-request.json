@@ -1,56 +1,48 @@
 {
   "kind": "build_request",
-  "title": "Fix error when saving a new visit entry",
-  "priority": "high",
+  "title": "Use clearly colored analytics graphs",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-16",
-      "text": "Fix the New Visit Entry save flow so that valid entries can always be saved successfully, and show a clear English error message in the UI when saving fails (instead of failing silently in the console).",
+      "id": "REQ-18",
+      "text": "Update the Analytics spending graphs so they visibly use distinct, clearly colored series for Hospital Charges and Medicine Charges (not monochrome), in both light and dark themes, and ensure the legend and tooltips match the same series colors.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages"
+          "msg-6"
         ],
         "quotes": [
-          "User message: \"Error to save new entry\""
+          "Use color graph"
         ]
       },
       "acceptanceCriteria": [
-        "From the \"New Entry\" tab, submitting the form with valid values results in the success message and the entry appears in \"My Entries\".",
-        "If saving fails for any reason (including client-side BigInt conversion errors or backend errors), the user sees a visible error message in English (e.g., \"Could not save entry. Please try again.\") and the form values are not cleared.",
-        "Hospital Charges (Rs) and Medicine Charges (Rs) inputs prevent or clearly validate non-integer values (e.g., decimals) so they cannot cause a BigInt conversion exception on submit.",
-        "The app does not rely only on console logs to communicate save failures to the user."
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "text": "Ensure the visit entry create/edit mutations propagate actionable error details to the UI so that backend traps (for example, authorization or type errors) can be surfaced as a user-friendly English message.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "recent-messages"
-        ],
-        "quotes": [
-          "User message: \"Error to save new entry\""
-        ]
-      },
-      "acceptanceCriteria": [
-        "When the backend rejects create/edit (e.g., traps), the UI displays an English error message and does not show the success banner.",
-        "The error message shown to users is sanitized/user-friendly (no raw stack traces), but should be specific enough to guide the user when possible (e.g., \"Unauthorized. Please sign in again.\")."
+        "On the Analytics page, the Hospital Charges series and Medicine Charges series render in two clearly different colors.",
+        "The chart colors remain readable and distinct in both light mode and dark mode.",
+        "The legend markers and tooltip indicators match the actual series colors used in the chart.",
+        "No user-facing text is added or changed to non-English."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/immutablePaths (including frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/main.tsx, and frontend/src/components/ui).",
-    "Keep all user-facing text in English.",
-    "Backend must remain a single Motoko actor in backend/main.mo; only introduce migration.mo if a state upgrade is required (not expected for this fix)."
+    "Do not modify any files under frontend/src/components/ui (compose existing UI components instead).",
+    "Do not edit files listed in frontend.immutablePaths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
   ],
   "nonGoals": [
-    "Do not redesign the overall UI theme or navigation for this fix.",
-    "Do not add new data fields to visit entries or change the stored schema unless strictly required to fix saving."
+    "Changing backend data models or analytics calculations.",
+    "Adding new chart types beyond the existing analytics charts."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

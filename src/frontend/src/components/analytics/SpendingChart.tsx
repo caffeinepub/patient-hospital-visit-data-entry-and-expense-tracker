@@ -18,11 +18,11 @@ interface SpendingChartProps {
 const chartConfig = {
   hospitalRs: {
     label: 'Hospital Charges (Rs)',
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--chart-1)',
   },
   medicineRs: {
     label: 'Medicine Charges (Rs)',
-    color: 'hsl(var(--chart-3))',
+    color: 'var(--chart-3)',
   },
 };
 
